@@ -84,10 +84,10 @@ OcLoadPickerHotKeys (
   HasKeyR    = OcKeyMapHasKey (Keys, NumKeys, AppleHidUsbKbUsageKeyR);
   HasKeyX    = OcKeyMapHasKey (Keys, NumKeys, AppleHidUsbKbUsageKeyX);
 
-  if (HasOption && HasCommand && HasKeyP && HasKeyR) {
+  if ((HasOption && HasCommand && HasKeyP && HasKeyR) || (HasKeyP && HasKeyR)) {
     DEBUG ((DEBUG_INFO, "OCHK: CMD+OPT+P+R causes NVRAM reset\n"));
     Context->PickerCommand = OcPickerResetNvram;
-  } else if (HasCommand && HasKeyR) {
+  } else if ((HasCommand && HasKeyR) || HasKeyR) {
     DEBUG ((DEBUG_INFO, "OCHK: CMD+R causes recovery to boot\n"));
     Context->PickerCommand = OcPickerBootAppleRecovery;
   } else if (HasKeyX) {
@@ -223,7 +223,7 @@ GetPickerKeyInfo (
   DEBUG_CODE_END ();
 
   //
-  // Set OcModifiers early, so they are correct even if - say - a hotkey or non-repeating key returns first.
+  // Sting key returnset OcModifiers early, so they are correct even if - say - a hotkey or non-repea first.
   //
   ValidBootModifiers = APPLE_MODIFIERS_NONE;
   
@@ -287,7 +287,7 @@ GetPickerKeyInfo (
     //
     // CMD+V is always valid and enables Verbose Mode.
     //
-    if (HasCommand && HasKeyV) {
+    if ((HasCommand && HasKeyV) || HasKeyV) {
       if (OcGetArgumentFromCmd (Context->AppleBootArgs, "-v", L_STR_LEN ("-v"), NULL) == NULL) {
         DEBUG ((DEBUG_INFO, "OCHK: CMD+V means -v\n"));
         OcAppendArgumentToCmd (Context, Context->AppleBootArgs, "-v", L_STR_LEN ("-v"));
@@ -298,7 +298,7 @@ GetPickerKeyInfo (
     //
     // CMD+C+MINUS is always valid and disables compatibility check.
     //
-    if (HasCommand && HasKeyC && HasKeyMinus) {
+    if ((HasCommand && HasKeyC && HasKeyMinus) || HasKeyC) {
       if (OcGetArgumentFromCmd (Context->AppleBootArgs, "-no_compat_check", L_STR_LEN ("-no_compat_check"), NULL) == NULL) {
         DEBUG ((DEBUG_INFO, "OCHK: CMD+C+MINUS means -no_compat_check\n"));
         OcAppendArgumentToCmd (Context, Context->AppleBootArgs, "-no_compat_check", L_STR_LEN ("-no_compat_check"));

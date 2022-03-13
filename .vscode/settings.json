@@ -10,6 +10,9 @@
         "ocmisclib.h": "c",
         "ocsimplebootmenuinternal.h": "c",
         "applekeymapaggregator.h": "c",
-        "opencanopy.h": "c"
+        "opencanopy.h": "c",
+        "istream": "c",
+        "ostream": "c",
+        "streambuf": "c"
     }
 }

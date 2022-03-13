@@ -441,7 +441,7 @@ InternalContextConstruct (
   } else {
     Context->Prefix = Picker->PickerVariant;
   }
-
+  
   LoadImageFileFromStorage (
     &Context->Background,
     Storage,

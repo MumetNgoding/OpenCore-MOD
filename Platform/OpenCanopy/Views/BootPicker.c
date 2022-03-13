@@ -499,7 +499,17 @@ InternalBootPickerKeyEvent (
 
     }
   }
-  
+  if (KeyEvent->OcKeyCode == OC_INPUT_FUNCTIONAL(1)){
+     GuiContext->Prefix = "Acidanthera\\F1";
+     GuiContext->Refresh = TRUE;
+     DrawContext->GuiContext->PickerContext->PlayAudioFile (
+     DrawContext->GuiContext->PickerContext,
+     OcVoiceOverAudioFileReloading,
+     FALSE
+    );
+
+  }
+
 }
 
 STATIC
