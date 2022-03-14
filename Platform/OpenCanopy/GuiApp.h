@@ -131,6 +131,7 @@ typedef struct _BOOT_PICKER_GUI_CONTEXT {
   INT32                                CursorOffsetY;
   INT32                                AudioPlaybackTimeout;
   OC_PICKER_CONTEXT                    *PickerContext;
+  BOOLEAN                              ThemeSwitch;
 } BOOT_PICKER_GUI_CONTEXT;
 
 EFI_STATUS

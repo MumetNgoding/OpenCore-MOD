@@ -500,16 +500,23 @@ InternalBootPickerKeyEvent (
     }
   }
   if (KeyEvent->OcKeyCode == OC_INPUT_FUNCTIONAL(1)){
-     GuiContext->Prefix = "Acidanthera\\F1";
-     GuiContext->Refresh = TRUE;
-     DrawContext->GuiContext->PickerContext->PlayAudioFile (
-     DrawContext->GuiContext->PickerContext,
-     OcVoiceOverAudioFileReloading,
-     FALSE
+    GuiContext->ThemeSwitch = !GuiContext->ThemeSwitch;
+    GuiContext->Refresh = TRUE;
+    DrawContext->GuiContext->PickerContext->PlayAudioFile (
+    DrawContext->GuiContext->PickerContext,
+    OcVoiceOverAudioFileReloading,
+    FALSE
     );
-
   }
-
+  
+  if (KeyEvent->OcKeyCode == OC_INPUT_INTERNAL) {
+    if (mBootPicker.Hdr.Obj.NumChildren > 0) {
+      SelectedEntry = InternalGetVolumeEntry (mBootPicker.SelectedIndex);
+      SelectedEntry->Context->SetDefault = (KeyEvent->OcModifiers & OC_MODIFIERS_SET_DEFAULT) != 0;
+      GuiContext->ReadyToBoot = TRUE;
+      ASSERT (GuiContext->BootEntry == SelectedEntry->Context);
+    }
+  } 
 }
 
 STATIC

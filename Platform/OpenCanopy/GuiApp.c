@@ -441,6 +441,13 @@ InternalContextConstruct (
   } else {
     Context->Prefix = Picker->PickerVariant;
   }
+  if (Context->ThemeSwitch)
+  {
+    Context->Prefix = "Acidanthera\\F1";
+  }else{
+    Context->Prefix = "Acidanthera\\GoldenGate";
+  }
+  
   
   LoadImageFileFromStorage (
     &Context->Background,
