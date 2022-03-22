@@ -1,5 +1,6 @@
-#!/usr/bin/env python
 #coding:utf-8
+#!/usr/bin/env python3
+
 """
 Validates schema files (e.g. OcConfigurationLib.c) for being sorted.
 """
