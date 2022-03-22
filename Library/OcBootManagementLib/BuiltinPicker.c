@@ -369,7 +369,6 @@ OcShowSimpleBootMenu (
   BOOLEAN                            PlayChosen;
   BOOLEAN                            ModifiersChanged;
   UINTN                              BannerCol;
-  UINTN                              BannerRow;
   UINTN                              MaxStrWidth;
   UINTN                              StrWidth;
   EFI_SIMPLE_TEXT_OUTPUT_MODE        SavedConsoleMode;
@@ -452,7 +451,6 @@ OcShowSimpleBootMenu (
             &Rows
             );
   BannerCol = (Columns - 65) / 2 ;
-  BannerRow = (Rows - (Count + 16)) / 2;
 
 //结束
 

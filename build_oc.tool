@@ -271,7 +271,7 @@ package() {
 
 cd "$(dirname "$0")" || exit 1
 if [ "$ARCHS" = "" ]; then
-  ARCHS=(X64 IA32)
+  ARCHS=(X64)
   export ARCHS
 fi
 SELFPKG=OpenCorePkg
@@ -282,10 +282,9 @@ export NO_ARCHIVES
 
 src=$(curl -Lfs https://gitee.com/btwise/ocbuild/raw/master/efibuild.sh) && eval "$src" || exit 1
 cd Library/OcConfigurationLib || exit 1
-./CheckSchema.py OcConfigurationLib.c >/dev/null || exit 1
 echo "编译成功!"
 echo "----------------------------------------------------------------"
-echo "运行检查架构脚本......"
-./CheckSchema.py OcConfigurationLib.c >/dev/null || exit 1
-echo "架构检查完成！"
+echo "运行检查配置结构脚本......"
+python3 ./CheckSchema.py OcConfigurationLib.c >/dev/null || exit 1
+echo "OC配置文件结构构检查完成！"
 echo "编译成功!" && open $BUILDDIR/Binaries
