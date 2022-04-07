@@ -280,7 +280,7 @@ NO_ARCHIVES=0
 export SELFPKG
 export NO_ARCHIVES
 
-src=$(curl -Lfs https://gitee.com/btwise/ocbuild/raw/master/efibuild.sh) && eval "$src" || exit 1
+src=$(curl -Lfs https://gitcode.net/btwise/ocbuild/-/raw/master/efibuild.sh) && eval "$src" || exit 1
 cd Library/OcConfigurationLib || exit 1
 echo "编译成功!"
 echo "----------------------------------------------------------------"

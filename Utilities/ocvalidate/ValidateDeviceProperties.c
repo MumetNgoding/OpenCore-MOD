@@ -41,6 +41,7 @@ DevPropsAddHasDuplication (
 
 /**
   Callback function to verify whether one entry is duplicated in DeviceProperties->Delete.
+
   @param[in]  PrimaryEntry    Primary entry to be checked.
   @param[in]  SecondaryEntry  Secondary entry to be checked.
   @retval     TRUE            If PrimaryEntry and SecondaryEntry are duplicated.
@@ -74,23 +75,21 @@ CheckDevicePropertiesAdd (
   UINT32                    ErrorCount;
   UINT32                    DeviceIndex;
   UINT32                    PropertyIndex;
-  OC_DEV_PROP_CONFIG        *UserDevProp;
   CONST CHAR8               *AsciiDevicePath;
   CONST CHAR8               *AsciiProperty;
   OC_ASSOC                  *PropertyMap;
 
   ErrorCount = 0;
-  UserDevProp = &Config->DeviceProperties;
 
-  for (DeviceIndex = 0; DeviceIndex < UserDevProp->Add.Count; ++DeviceIndex) {
-    AsciiDevicePath = OC_BLOB_GET (UserDevProp->Add.Keys[DeviceIndex]);
-    
+  for (DeviceIndex = 0; DeviceIndex < Config->DeviceProperties.Add.Count; ++DeviceIndex) {
+    AsciiDevicePath = OC_BLOB_GET (Config->DeviceProperties.Add.Keys[DeviceIndex]);
+
     if (!AsciiDevicePathIsLegal (AsciiDevicePath)) {
       DEBUG ((DEBUG_WARN, "DeviceProperties->Add[%u]->DevicePath不对! 请检查以上信息!\n", DeviceIndex));
       ++ErrorCount;
     }
 
-    PropertyMap = UserDevProp->Add.Values[DeviceIndex];
+    PropertyMap = Config->DeviceProperties.Add.Values[DeviceIndex];
     for (PropertyIndex = 0; PropertyIndex < PropertyMap->Count; ++PropertyIndex) {
       AsciiProperty = OC_BLOB_GET (PropertyMap->Keys[PropertyIndex]);
 
@@ -123,9 +122,9 @@ CheckDevicePropertiesAdd (
   // Check duplicated entries in DeviceProperties->Add.
   //
   ErrorCount += FindArrayDuplication (
-    UserDevProp->Add.Keys,
-    UserDevProp->Add.Count,
-    sizeof (UserDevProp->Add.Keys[0]),
+    Config->DeviceProperties.Add.Keys,
+    Config->DeviceProperties.Add.Count,
+    sizeof (Config->DeviceProperties.Add.Keys[0]),
     DevPropsAddHasDuplication
     );
 
@@ -141,23 +140,21 @@ CheckDevicePropertiesDelete (
   UINT32                    ErrorCount;
   UINT32                    DeviceIndex;
   UINT32                    PropertyIndex;
-  OC_DEV_PROP_CONFIG        *UserDevProp;
   CONST CHAR8               *AsciiDevicePath;
   CONST CHAR8               *AsciiProperty;
 
   ErrorCount = 0;
-  UserDevProp = &Config->DeviceProperties;
 
-  for (DeviceIndex = 0; DeviceIndex < UserDevProp->Delete.Count; ++DeviceIndex) {
-    AsciiDevicePath = OC_BLOB_GET (UserDevProp->Delete.Keys[DeviceIndex]);
-    
+  for (DeviceIndex = 0; DeviceIndex < Config->DeviceProperties.Delete.Count; ++DeviceIndex) {
+    AsciiDevicePath = OC_BLOB_GET (Config->DeviceProperties.Delete.Keys[DeviceIndex]);
+
     if (!AsciiDevicePathIsLegal (AsciiDevicePath)) {
       DEBUG ((DEBUG_WARN, "DeviceProperties->Delete[%u]->DevicePath不对! 请检查以上信息!\n", DeviceIndex));
       ++ErrorCount;
     }
 
-    for (PropertyIndex = 0; PropertyIndex < UserDevProp->Delete.Values[DeviceIndex]->Count; ++PropertyIndex) {
-      AsciiProperty = OC_BLOB_GET (UserDevProp->Delete.Values[DeviceIndex]->Values[PropertyIndex]);
+    for (PropertyIndex = 0; PropertyIndex < Config->DeviceProperties.Delete.Values[DeviceIndex]->Count; ++PropertyIndex) {
+      AsciiProperty = OC_BLOB_GET (Config->DeviceProperties.Delete.Values[DeviceIndex]->Values[PropertyIndex]);
 
       //
       // Sanitise strings.
@@ -177,9 +174,9 @@ CheckDevicePropertiesDelete (
     // Check duplicated properties in DeviceProperties->Delete[N].
     //
     ErrorCount += FindArrayDuplication (
-      UserDevProp->Delete.Values[DeviceIndex]->Values,
-      UserDevProp->Delete.Values[DeviceIndex]->Count,
-      sizeof (UserDevProp->Delete.Values[DeviceIndex]->Values[0]),
+      Config->DeviceProperties.Delete.Values[DeviceIndex]->Values,
+      Config->DeviceProperties.Delete.Values[DeviceIndex]->Count,
+      sizeof (Config->DeviceProperties.Delete.Values[DeviceIndex]->Values[0]),
       DevPropsDeleteHasDuplication
       );
   }
@@ -188,9 +185,9 @@ CheckDevicePropertiesDelete (
   // Check duplicated entries in DeviceProperties->Delete.
   //
   ErrorCount += FindArrayDuplication (
-    UserDevProp->Delete.Keys,
-    UserDevProp->Delete.Count,
-    sizeof (UserDevProp->Delete.Keys[0]),
+    Config->DeviceProperties.Delete.Keys,
+    Config->DeviceProperties.Delete.Count,
+    sizeof (Config->DeviceProperties.Delete.Keys[0]),
     DevPropsDeleteHasDuplication
     );
 
