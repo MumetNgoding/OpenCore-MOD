@@ -21,21 +21,19 @@ CheckBooterMmioWhitelist (
 {
   UINT32            ErrorCount;
   UINT32            Index;
-  OC_BOOTER_CONFIG  *UserBooter;
   CONST CHAR8       *Comment;
   BOOLEAN           IsMmioWhitelistEnabled;
   BOOLEAN           ShouldEnableDevirtualiseMmio;
   BOOLEAN           IsDevirtualiseMmioEnabled;
 
   ErrorCount                   = 0;
-  UserBooter                   = &Config->Booter;
-  IsDevirtualiseMmioEnabled    = UserBooter->Quirks.DevirtualiseMmio;
+  IsDevirtualiseMmioEnabled    = Config->Booter.Quirks.DevirtualiseMmio;
 
   IsMmioWhitelistEnabled       = FALSE;
   ShouldEnableDevirtualiseMmio = FALSE;
-  for (Index = 0; Index < UserBooter->MmioWhitelist.Count; ++Index) {
-    Comment                = OC_BLOB_GET (&UserBooter->MmioWhitelist.Values[Index]->Comment);
-    IsMmioWhitelistEnabled = UserBooter->MmioWhitelist.Values[Index]->Enabled;
+  for (Index = 0; Index < Config->Booter.MmioWhitelist.Count; ++Index) {
+    Comment                = OC_BLOB_GET (&Config->Booter.MmioWhitelist.Values[Index]->Comment);
+    IsMmioWhitelistEnabled = Config->Booter.MmioWhitelist.Values[Index]->Enabled;
     //
     // DevirtualiseMmio should be enabled if at least one entry is enabled.
     //
@@ -65,7 +63,6 @@ CheckBooterPatch (
 {
   UINT32            ErrorCount;
   UINT32            Index;
-  OC_BOOTER_CONFIG  *UserBooter;
   CONST CHAR8       *Comment;
   CONST CHAR8       *Arch;
   CONST CHAR8       *Identifier;
@@ -79,20 +76,19 @@ CheckBooterPatch (
   UINT32            ReplaceMaskSize;
 
   ErrorCount        = 0;
-  UserBooter        = &Config->Booter;
 
-  for (Index = 0; Index < UserBooter->Patch.Count; ++Index) {
-    Comment         = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Comment);
-    Arch            = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Arch);
-    Identifier      = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Identifier);
-    Find            = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Find);
-    FindSize        = UserBooter->Patch.Values[Index]->Find.Size;
-    Replace         = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Replace);
-    ReplaceSize     = UserBooter->Patch.Values[Index]->Replace.Size;
-    Mask            = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->Mask);
-    MaskSize        = UserBooter->Patch.Values[Index]->Mask.Size;
-    ReplaceMask     = OC_BLOB_GET (&UserBooter->Patch.Values[Index]->ReplaceMask);
-    ReplaceMaskSize = UserBooter->Patch.Values[Index]->ReplaceMask.Size;
+  for (Index = 0; Index < Config->Booter.Patch.Count; ++Index) {
+    Comment         = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Comment);
+    Arch            = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Arch);
+    Identifier      = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Identifier);
+    Find            = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Find);
+    FindSize        = Config->Booter.Patch.Values[Index]->Find.Size;
+    Replace         = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Replace);
+    ReplaceSize     = Config->Booter.Patch.Values[Index]->Replace.Size;
+    Mask            = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->Mask);
+    MaskSize        = Config->Booter.Patch.Values[Index]->Mask.Size;
+    ReplaceMask     = OC_BLOB_GET (&Config->Booter.Patch.Values[Index]->ReplaceMask);
+    ReplaceMaskSize = Config->Booter.Patch.Values[Index]->ReplaceMask.Size;
 
     //
     // Sanitise strings.
@@ -139,8 +135,6 @@ CheckBooterQuirks (
 {
   UINT32                ErrorCount;
   UINT32                Index;
-  OC_BOOTER_CONFIG      *UserBooter;
-  OC_UEFI_CONFIG        *UserUefi;
   OC_UEFI_DRIVER_ENTRY  *DriverEntry;
   CONST CHAR8           *Driver;
   UINT8                 MaxSlide;
@@ -153,19 +147,17 @@ CheckBooterQuirks (
   INT8                  ResizeAppleGpuBars;
 
   ErrorCount                      = 0;
-  UserBooter                      = &Config->Booter;
-  UserUefi                        = &Config->Uefi;
-  IsAllowRelocationBlockEnabled   = UserBooter->Quirks.AllowRelocationBlock;
-  IsProvideCustomSlideEnabled     = UserBooter->Quirks.ProvideCustomSlide;
-  IsEnableSafeModeSlideEnabled    = UserBooter->Quirks.EnableSafeModeSlide;
-  IsDisableVariableWriteEnabled   = UserBooter->Quirks.DisableVariableWrite;
-  IsEnableWriteUnprotectorEnabled = UserBooter->Quirks.EnableWriteUnprotector;
+  IsAllowRelocationBlockEnabled   = Config->Booter.Quirks.AllowRelocationBlock;
+  IsProvideCustomSlideEnabled     = Config->Booter.Quirks.ProvideCustomSlide;
+  IsEnableSafeModeSlideEnabled    = Config->Booter.Quirks.EnableSafeModeSlide;
+  IsDisableVariableWriteEnabled   = Config->Booter.Quirks.DisableVariableWrite;
+  IsEnableWriteUnprotectorEnabled = Config->Booter.Quirks.EnableWriteUnprotector;
   HasOpenRuntimeEfiDriver         = FALSE;
-  MaxSlide                        = UserBooter->Quirks.ProvideMaxSlide;
-  ResizeAppleGpuBars              = UserBooter->Quirks.ResizeAppleGpuBars;
+  MaxSlide                        = Config->Booter.Quirks.ProvideMaxSlide;
+  ResizeAppleGpuBars              = Config->Booter.Quirks.ResizeAppleGpuBars;
 
-  for (Index = 0; Index < UserUefi->Drivers.Count; ++Index) {
-    DriverEntry = UserUefi->Drivers.Values[Index];
+  for (Index = 0; Index < Config->Uefi.Drivers.Count; ++Index) {
+    DriverEntry = Config->Uefi.Drivers.Values[Index];
     Driver      = OC_BLOB_GET (&DriverEntry->Path);
 
     //
@@ -208,13 +200,13 @@ CheckBooterQuirks (
   }
 
   if (ResizeAppleGpuBars > 10) {
-    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars 设置为 %d, 这是 macOS 不支持的!\n", UserBooter->Quirks.ResizeAppleGpuBars));
+    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars  设置为 %d, 这是 macOS 不支持的!\n", Config->Booter.Quirks.ResizeAppleGpuBars));
     ++ErrorCount;
   } else if (ResizeAppleGpuBars > 8) {
-    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars 设置为 %d, macOS 睡眠唤醒不稳定!\n", UserBooter->Quirks.ResizeAppleGpuBars));
+    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars 设置为 %d, macOS 睡眠唤醒不稳定!\n", Config->Booter.Quirks.ResizeAppleGpuBars));
     ++ErrorCount;
   } else if (ResizeAppleGpuBars > 0) {
-    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars 设置为 %d, 这对 macOS 没有用!\n", UserBooter->Quirks.ResizeAppleGpuBars));
+    DEBUG ((DEBUG_WARN, "Booter->Quirks->ResizeAppleGpuBars 设置为 %d, 这对 macOS 没有用!\n", Config->Booter.Quirks.ResizeAppleGpuBars));
     ++ErrorCount;
   }
 
