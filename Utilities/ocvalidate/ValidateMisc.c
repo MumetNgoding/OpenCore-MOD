@@ -566,9 +566,9 @@ ValidateBaudRate (
   //
   STATIC CONST UINT32 AllowedBaudRate[] = {
     921600U, 460800U, 230400U, 115200U,
-    57600U, 38400U, 19200U, 9600U, 7200U, 
+    57600U, 38400U, 19200U, 9600U, 7200U,
     4800U, 3600U, 2400U, 2000U, 1800U,
-    1200U, 600U, 300U, 150U, 134U, 
+    1200U, 600U, 300U, 150U, 134U,
     110U, 75U, 50U
   };
 
@@ -578,8 +578,8 @@ ValidateBaudRate (
     }
   }
 
-  DEBUG ((DEBUG_WARN, "Misc->Serial->BaudRate is borked!\n"));
-  DEBUG ((DEBUG_WARN, "Accepted BaudRate values:\n"));
+  DEBUG ((DEBUG_WARN, "Misc->Serial->BaudRate 不正确!\n"));
+  DEBUG ((DEBUG_WARN, "可以接受的波特率值:\n"));
   for (Index = 0; Index < ARRAY_SIZE (AllowedBaudRate); ++Index) {
     DEBUG ((DEBUG_WARN, "%u, ", AllowedBaudRate[Index]));
     if (Index != 0 && Index % 5 == 0) {
@@ -608,13 +608,13 @@ CheckMiscSerial (
   // Reference:
   // https://github.com/acidanthera/audk/blob/bb1bba3d776733c41dbfa2d1dc0fe234819a79f2/MdeModulePkg/MdeModulePkg.dec#L1199-L1200
   //
-  RegisterAccessWidth = Config->Misc.Serial.RegisterAccessWidth;
+  RegisterAccessWidth = Config->Misc.Serial.Custom.RegisterAccessWidth;
   if (RegisterAccessWidth != 8U && RegisterAccessWidth != 32U) {
-    DEBUG ((DEBUG_WARN, "Misc->Serial->RegisterAccessWidth can only be 8 or 32!\n"));
+    DEBUG ((DEBUG_WARN, "Misc->Serial->RegisterAccessWidth 只能是 8 或 32!\n"));
     ++ErrorCount;
   }
 
-  BaudRate = Config->Misc.Serial.BaudRate;
+  BaudRate = Config->Misc.Serial.Custom.BaudRate;
   if (!ValidateBaudRate (BaudRate)) {
     ++ErrorCount;
   }
@@ -623,22 +623,22 @@ CheckMiscSerial (
   // Reference:
   // https://github.com/acidanthera/audk/blob/bb1bba3d776733c41dbfa2d1dc0fe234819a79f2/MdeModulePkg/MdeModulePkg.dec#L1393
   //
-  PciDeviceInfo = OC_BLOB_GET (&Config->Misc.Serial.PciDeviceInfo);
-  PciDeviceInfoSize = Config->Misc.Serial.PciDeviceInfo.Size;
+  PciDeviceInfo = OC_BLOB_GET (&Config->Misc.Serial.Custom.PciDeviceInfo);
+  PciDeviceInfoSize = Config->Misc.Serial.Custom.PciDeviceInfo.Size;
   if (PciDeviceInfoSize > OC_SERIAL_PCI_DEVICE_INFO_MAX_SIZE) {
-    DEBUG ((DEBUG_WARN, "Size of Misc->Serial->PciDeviceInfo cannot exceed %u!\n", OC_SERIAL_PCI_DEVICE_INFO_MAX_SIZE));
+    DEBUG ((DEBUG_WARN, "Size of Misc->Serial->PciDeviceInfo 不能超过 %u!\n", OC_SERIAL_PCI_DEVICE_INFO_MAX_SIZE));
     ++ErrorCount;
   } else if (PciDeviceInfoSize == 0) {
-    DEBUG ((DEBUG_WARN, "Misc->Serial->PciDeviceInfo cannot be empty (use 0xFF instead)!\n"));
+    DEBUG ((DEBUG_WARN, "Misc->Serial->PciDeviceInfo 不能为空 (改用 0xFF)!\n"));
     ++ErrorCount;
   } else {
     if (PciDeviceInfo[PciDeviceInfoSize - 1] != 0xFFU) {
-      DEBUG ((DEBUG_WARN, "Last byte of Misc->Serial->PciDeviceInfo must be 0xFF!\n"));
+      DEBUG ((DEBUG_WARN, "Misc->Serial->PciDeviceInfo 的最后一个字节必须是 0xFF!\n"));
       ++ErrorCount;
     }
 
     if ((PciDeviceInfoSize - 1) % 4 != 0) {
-      DEBUG ((DEBUG_WARN, "Misc->Serial->PciDeviceInfo must be divisible by 4 excluding the last 0xFF!\n"));
+      DEBUG ((DEBUG_WARN, "Misc->Serial->PciDeviceInfo 除最后一个 0xFF 外，必须能被 4 整除!\n"));
       ++ErrorCount;
     }
   }
