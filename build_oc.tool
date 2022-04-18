@@ -1,5 +1,10 @@
 #!/bin/bash
 
+abort() {
+  echo "ERROR: $1!"
+  exit 1
+}
+
 buildutil() {
   UTILS=(
     "AppleEfiSignTool"
@@ -282,10 +287,25 @@ export SELFPKG
 export NO_ARCHIVES
 
 src=$(curl -Lfs https://gitcode.net/btwise/ocbuild/-/raw/master/efibuild.sh) && eval "$src" || exit 1
+
+cd Utilities/ocvalidate || exit 1
+ocv_tool=""
+if [ -x ./ocvalidate ]; then
+  ocv_tool=./ocvalidate
+elif [ -x ./ocvalidate.exe ]; then
+  ocv_tool=./ocvalidate.exe
+fi
+
+if [ -x "$ocv_tool" ]; then
+  "$ocv_tool" ../../Docs/Sample.plist || abort "Sample.plist错误"
+  "$ocv_tool" ../../Docs/SampleCustom.plist || abort "SampleCustom.plist错误"
+fi
+cd ../..
+
 cd Library/OcConfigurationLib || exit 1
 echo "编译成功!"
 echo "----------------------------------------------------------------"
-echo "运行检查配置结构脚本......"
-python3 ./CheckSchema.py OcConfigurationLib.c >/dev/null || exit 1
-echo "OC配置文件结构构检查完成！"
+echo "运行检查架构脚本......"
+python3 ./CheckSchema.py OcConfigurationLib.c >/dev/null || abort "OccConfigurationLib.c错误"
+echo "架构检查完成！"
 echo "编译成功!" && open $BUILDDIR/Binaries
