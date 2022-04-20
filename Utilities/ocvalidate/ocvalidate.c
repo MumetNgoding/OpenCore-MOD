@@ -78,11 +78,12 @@ int ENTRY_POINT(int argc, const char *argv[]) {
   PcdGet32 (PcdFixedDebugPrintErrorLevel) |= DEBUG_INFO;
   PcdGet32 (PcdDebugPrintErrorLevel)      |= DEBUG_INFO;
 
+  DEBUG ((DEBUG_ERROR, "\n注意: 此版本的 ocvalidate 仅兼容 OpenCore 版本 %a!\n\n", OPEN_CORE_VERSION));
+
   //
   // Print usage.
   //
   if (argc != 2 || (argc > 1 && AsciiStrCmp (argv[1], "--version") == 0)) {
-    DEBUG ((DEBUG_ERROR, "\n注意：此版本的ocvalidate仅适用于OpenCore版本 %a!\n\n", OPEN_CORE_VERSION));
     DEBUG ((DEBUG_ERROR, "用法: %a <指定路径/config.plist>\n\n", argv[0]));
     return -1;
   }
