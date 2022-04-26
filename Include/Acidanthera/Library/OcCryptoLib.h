@@ -145,13 +145,11 @@ typedef struct SHA512_CONTEXT_ {
 
 typedef SHA512_CONTEXT SHA384_CONTEXT;
 
-#pragma pack(push, 1)
-
 ///
 /// The structure describing the RSA Public Key format.
 /// The exponent is always 65537.
 ///
-typedef PACKED struct {
+typedef struct {
   ///
   /// The number of 64-bit values of N and RSqrMod each.
   ///
@@ -166,7 +164,12 @@ typedef PACKED struct {
   UINT64    N0Inv;
 } OC_RSA_PUBLIC_KEY_HDR;
 
-typedef PACKED struct {
+STATIC_ASSERT (
+  sizeof (OC_RSA_PUBLIC_KEY_HDR) == 16,
+  "The PK header struct is malformed."
+  );
+
+typedef struct {
   ///
   /// The RSA Public Key header structure.
   ///
@@ -177,7 +180,10 @@ typedef PACKED struct {
   UINT64                   Data[];
 } OC_RSA_PUBLIC_KEY;
 
-#pragma pack(pop)
+STATIC_ASSERT (
+  sizeof (OC_RSA_PUBLIC_KEY_HDR) == sizeof (OC_RSA_PUBLIC_KEY_HDR),
+  "The PK struct is malformed."
+  );
 
 //
 // Functions prototypes
@@ -416,11 +422,19 @@ SigVerifyShaHashBySize (
   IN UINTN        HashSize
   );
 
+#define RSA_MOD_MAX_SIZE  BASE_16KB
+
 /**
-  @param[in] ModulusSize    Modulus size in bytes.
+  @param[in] ModulusSize  Modulus size in bytes. Must be at most
+                          RSA_MOD_MAX_SIZE.
 **/
 #define RSA_SCRATCH_BUFFER_SIZE(ModulusSize) \
-  ((ModulusSize) * 3)
+  ((ModulusSize) * 3U)
+
+STATIC_ASSERT (
+  RSA_MOD_MAX_SIZE <= MAX_UINTN / 3U,
+  "The definition of RSA_SCRATCH_BUFFER_SIZE may cause an overflow"
+  );
 
 /**
   Verify a RSA PKCS1.5 signature against an expected hash.
@@ -447,6 +461,34 @@ RsaVerifySigHashFromKey (
   IN OC_SIG_HASH_TYPE         Algorithm,
   IN VOID                     *Scratch
   );
+
+#ifndef OC_CRYPTO_NDYNALLOC
+
+/**
+  Verify a RSA PKCS1.5 signature against an expected hash.
+  The exponent is always 65537 as per the format specification.
+
+  @param[in] Key            The RSA Public Key.
+  @param[in] Signature      The RSA signature to be verified.
+  @param[in] SignatureSize  Size, in bytes, of Signature.
+  @param[in] Hash           The Hash digest of the signed data.
+  @param[in] HashSize       Size, in bytes, of Hash.
+  @param[in] Algorithm      The RSA algorithm used.
+
+  @returns  Whether the signature has been successfully verified as valid.
+
+**/
+BOOLEAN
+RsaVerifySigHashFromKeyDynalloc (
+  IN CONST OC_RSA_PUBLIC_KEY  *Key,
+  IN CONST UINT8              *Signature,
+  IN UINTN                    SignatureSize,
+  IN CONST UINT8              *Hash,
+  IN UINTN                    HashSize,
+  IN OC_SIG_HASH_TYPE         Algorithm
+  );
+
+#endif // OC_CRYPTO_NDYNALLOC
 
 /**
   Verify RSA PKCS1.5 signed data against its signature.
@@ -475,6 +517,36 @@ RsaVerifySigDataFromKey (
   IN OC_SIG_HASH_TYPE         Algorithm,
   IN VOID                     *Scratch
   );
+
+#ifndef OC_CRYPTO_NDYNALLOC
+
+/**
+  Verify RSA PKCS1.5 signed data against its signature.
+  The modulus' size must be a multiple of the configured BIGNUM word size.
+  This will be true for any conventional RSA, which use two's potencies.
+  The exponent is always 65537 as per the format specification.
+
+  @param[in] Key            The RSA Public Key.
+  @param[in] Signature      The RSA signature to be verified.
+  @param[in] SignatureSize  Size, in bytes, of Signature.
+  @param[in] Data           The signed data to verify.
+  @param[in] DataSize       Size, in bytes, of Data.
+  @param[in] Algorithm      The RSA algorithm used.
+
+  @returns  Whether the signature has been successfully verified as valid.
+
+**/
+BOOLEAN
+RsaVerifySigDataFromKeyDynalloc (
+  IN CONST OC_RSA_PUBLIC_KEY  *Key,
+  IN CONST UINT8              *Signature,
+  IN UINTN                    SignatureSize,
+  IN CONST UINT8              *Data,
+  IN UINTN                    DataSize,
+  IN OC_SIG_HASH_TYPE         Algorithm
+  );
+
+#endif // OC_CRYPTO_NDYNALLOC
 
 /**
   Verify RSA PKCS1.5 signed data against its signature.
