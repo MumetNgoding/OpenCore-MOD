@@ -30,11 +30,7 @@
   OpenCore version reported to log and NVRAM.
   OPEN_CORE_VERSION must follow X.Y.Z format, where X.Y.Z are single digits.
 **/
-<<<<<<< HEAD
-#define OPEN_CORE_VERSION          "0.8.0"
-=======
 #define OPEN_CORE_VERSION  "0.8.1"
->>>>>>> c49f64c78391a1e78af11fd7a7ed37129496be63
 
 /**
   OpenCore build type reported to log and NVRAM.

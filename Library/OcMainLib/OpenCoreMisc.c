@@ -944,12 +944,8 @@ OcMiscBoot (
   Context->BlacklistAppleUpdate = Config->Misc.Security.BlacklistAppleUpdate;
 
   if ((Config->Misc.Security.ExposeSensitiveData & OCS_EXPOSE_VERSION_UI) != 0) {
-<<<<<<< HEAD
     Context->TitleSuffix      = OcMiscGetVersionString ();
     Context->WelcomeSuffix    = OcWelcomeString ();
-=======
-    Context->TitleSuffix = OcMiscGetVersionString ();
->>>>>>> c49f64c78391a1e78af11fd7a7ed37129496be63
   }
 
   if ((Config->Misc.Security.ExposeSensitiveData & OCS_EXPOSE_VERSION_UI) == 0) {

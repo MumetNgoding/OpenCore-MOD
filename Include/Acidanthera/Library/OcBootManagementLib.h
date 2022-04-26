@@ -42,7 +42,6 @@ typedef struct OC_HOTKEY_CONTEXT_ OC_HOTKEY_CONTEXT;
 /**
   Default strings for use in the interfaces.
 **/
-<<<<<<< HEAD
 #define OC_MENU_BOOT_MENU            L"OpenCore 启动菜单 "
 #define OC_MENU_RESET_NVRAM_ENTRY    L"Reset NVRAM"
 #define OC_MENU_UEFI_SHELL_ENTRY     L"UEFI Shell"
@@ -60,25 +59,6 @@ typedef struct OC_HOTKEY_CONTEXT_ OC_HOTKEY_CONTEXT;
 #define OC_MENU_RESTART              L"Restarting"
 #define OC_MENU_SIP_IS_DISABLED      L"Toggle SIP (Disabled)"
 #define OC_MENU_SIP_IS_ENABLED       L"Toggle SIP (Enabled)"
-=======
-#define OC_MENU_BOOT_MENU             L"OpenCore Boot Menu"
-#define OC_MENU_RESET_NVRAM_ENTRY     L"Reset NVRAM"
-#define OC_MENU_UEFI_SHELL_ENTRY      L"UEFI Shell"
-#define OC_MENU_PASSWORD_REQUEST      L"Password: "
-#define OC_MENU_PASSWORD_PROCESSING   L"Verifying password..."
-#define OC_MENU_PASSWORD_RETRY_LIMIT  L"Password retry limit exceeded."
-#define OC_MENU_CHOOSE_OS             L"Choose the Operating System: "
-#define OC_MENU_SHOW_AUXILIARY        L"Show Auxiliary"
-#define OC_MENU_RELOADING             L"Reloading"
-#define OC_MENU_TIMEOUT               L"Timeout"
-#define OC_MENU_OK                    L"OK"
-#define OC_MENU_EXTERNAL              L" (external)"
-#define OC_MENU_DISK_IMAGE            L" (dmg)"
-#define OC_MENU_SHUTDOWN              L"Shutting Down"
-#define OC_MENU_RESTART               L"Restarting"
-#define OC_MENU_SIP_IS_DISABLED       L"Toggle SIP (Disabled)"
-#define OC_MENU_SIP_IS_ENABLED        L"Toggle SIP (Enabled)"
->>>>>>> c49f64c78391a1e78af11fd7a7ed37129496be63
 
 /**
   Predefined flavours.
@@ -892,15 +872,11 @@ struct OC_PICKER_CONTEXT_ {
   //
   // Additional suffix to include by the interface.
   //
-<<<<<<< HEAD
   CONST CHAR8                *TitleSuffix;
   CONST CHAR8                *TempTitleSuffix;
   //添加一个自定义常量
   CONST CHAR8                *WelcomeSuffix;
   CONST CHAR8                *TempWelcomSuffix; //临时变量
-=======
-  CONST CHAR8                 *TitleSuffix;
->>>>>>> c49f64c78391a1e78af11fd7a7ed37129496be63
   //
   // Used picker mode.
   //

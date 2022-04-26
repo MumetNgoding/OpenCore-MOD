@@ -102,33 +102,6 @@ STATIC TAB_FOCUS  mFocusListMinimal[] = {
 #define OC_KB_DBG_X_ROW          (OC_KB_DBG_PRINT_ROW + 5)
 #define OC_KB_DBG_MODIFIERS_ROW  (OC_KB_DBG_PRINT_ROW + 6)
 
-
-STATIC
-VOID
-PrintBanner (
-  IN UINTN               Col,
-  IN UINTN               Row
-  )
-{
-  gST->ConOut->SetCursorPosition (gST->ConOut, Col, Row);
-  gST->ConOut->OutputString (gST->ConOut,
-    L"   _____   ______  _____   __  ___ _____  _____   _____   _____  "
-    );
-  gST->ConOut->SetCursorPosition (gST->ConOut, Col, Row + 1);
-  gST->ConOut->OutputString (gST->ConOut,
-    L"  / ___ \\ /   _  )/  __ \\ /  |/  //  ___)/ ___ \\ /  __ \\ /  __ \\ "
-    );
-  gST->ConOut->SetCursorPosition (gST->ConOut, Col, Row + 2);
-  gST->ConOut->OutputString (gST->ConOut,
-    L" / /__/ //  /___//  (___//      //  /__ / /__/ //  /_/ //  (___/ "
-    );
-  gST->ConOut->SetCursorPosition (gST->ConOut, Col, Row + 3);
-  gST->ConOut->OutputString (gST->ConOut,
-    L" \\_____//__/     \\_____ /__/|__/ \\_____)\\_____//__/ \\__\\\\_____   "
-    );
-}
-
-
 STATIC
 VOID
 InitKbDebugDisplay (
@@ -375,24 +348,6 @@ OcShowSimpleBootMenu (
   BOOLEAN                            PlayedOnce;
   BOOLEAN                            PlayChosen;
   BOOLEAN                            ModifiersChanged;
-  UINTN                              BannerCol;
-  UINTN                              MaxStrWidth;
-  UINTN                              StrWidth;
-  EFI_SIMPLE_TEXT_OUTPUT_MODE        SavedConsoleMode;
-  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL    *ConOut;
-  UINTN                              Columns;
-  UINTN                              Rows;
-#if defined(BUILTIN_DEMONSTRATE_TYPING)
-  INT32                              TypingRow;
-  INT32                              TypingColumn;
-  INT32                              TypingStartColumn;
-#endif
-  INT32                              ShutdownRestartRow;
-  INT32                              ShutdownColumn;
-  INT32                              RestartColumn;
-  UINTN                              FocusState;
-  TAB_FOCUS                          *FocusList;
-  UINTN                              NumFocusList;
 
  #if defined (BUILTIN_DEMONSTRATE_TYPING)
   INT32  TypingRow;
@@ -453,27 +408,6 @@ OcShowSimpleBootMenu (
   }
 
   Count = (UINT32)BootContext->BootEntryCount;
-
-//测试自定义终端画面
-  MaxStrWidth      = 0;
-    ConOut = gST->ConOut;
-  CopyMem (&SavedConsoleMode, ConOut->Mode, sizeof (SavedConsoleMode));
-
-  for (Index = 0; Index < MIN (Count, OC_INPUT_MAX); ++Index) {
-    StrWidth = UnicodeStringDisplayLength (BootEntries[Index]->Name) + ((BootEntries[Index]->IsFolder || BootEntries[Index]->IsExternal) ? 11 : 5);
-    MaxStrWidth = MaxStrWidth > StrWidth ? MaxStrWidth : StrWidth;
-  }
-
-  ConOut->QueryMode (
-            ConOut,
-            gST->ConOut->Mode->Mode,
-            &Columns,
-            &Rows
-            );
-  BannerCol = (Columns - 65) / 2 ;
-
-//结束
-
 
   if (Count != MIN (Count, OC_INPUT_MAX)) {
     DEBUG ((DEBUG_WARN, "OCB: Cannot display all entries in the menu!\n"));
@@ -546,14 +480,11 @@ OcShowSimpleBootMenu (
       // Render initial menu
       //
       gST->ConOut->ClearScreen (gST->ConOut);
-      PrintBanner (BannerCol * 2, 3);
-      gST->ConOut->OutputString (gST->ConOut, L"\r\n");
-      // gST->ConOut->OutputString (gST->ConOut, OC_MENU_BOOT_MENU);
-      gST->ConOut->SetCursorPosition(ConOut,ConOut->Mode->CursorColumn + BannerCol,Rows * 2);
+      //gST->ConOut->OutputString (gST->ConOut, OC_MENU_BOOT_MENU);
+
       if (BootContext->PickerContext->TitleSuffix != NULL) {
         Length = AsciiStrLen (BootContext->PickerContext->TitleSuffix);
-        gST->ConOut->SetCursorPosition (gST->ConOut, Columns - 13, Rows);
-        gST->ConOut->OutputString (gST->ConOut, L"              ");
+        gST->ConOut->OutputString (gST->ConOut, L" (");
         for (Index = 0; Index < Length; ++Index) {
           Code[0] = BootContext->PickerContext->TitleSuffix[Index];
           gST->ConOut->OutputString (gST->ConOut, Code);
