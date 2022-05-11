@@ -558,7 +558,8 @@ InternalBootPickerKeyEvent (
       GuiContext->Refresh = TRUE;
       DrawContext->GuiContext->PickerContext->PlayAudioFile (
                                                 DrawContext->GuiContext->PickerContext,
-                                                OcVoiceOverAudioFileShowAuxiliary,
+                                                OC_VOICE_OVER_AUDIO_FILE_SHOW_AUXILIARY,
+                                                OC_VOICE_OVER_AUDIO_BASE_TYPE_OPEN_CORE,
                                                 FALSE
                                                 );
     }
@@ -566,7 +567,8 @@ InternalBootPickerKeyEvent (
     GuiContext->Refresh = TRUE;
     DrawContext->GuiContext->PickerContext->PlayAudioFile (
                                               DrawContext->GuiContext->PickerContext,
-                                              OcVoiceOverAudioFileReloading,
+                                              OC_VOICE_OVER_AUDIO_FILE_RELOADING,
+                                              OC_VOICE_OVER_AUDIO_BASE_TYPE_OPEN_CORE,
                                               FALSE
                                               );
   }
@@ -1256,7 +1258,8 @@ InternalBootPickerViewKeyEvent (
   if (KeyEvent->OcKeyCode == OC_INPUT_VOICE_OVER) {
     DrawContext->GuiContext->PickerContext->ToggleVoiceOver (
                                               DrawContext->GuiContext->PickerContext,
-                                              0
+                                              NULL,
+                                              NULL
                                               );
     return;
   }

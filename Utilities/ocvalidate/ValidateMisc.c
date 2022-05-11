@@ -280,9 +280,10 @@ CheckMiscBoot (
   LauncherOption = OC_BLOB_GET (&Config->Misc.Boot.LauncherOption);
   if (  (AsciiStrCmp (LauncherOption, "Disabled") != 0)
      && (AsciiStrCmp (LauncherOption, "Full") != 0)
-     && (AsciiStrCmp (LauncherOption, "Short") != 0))
+     && (AsciiStrCmp (LauncherOption, "Short") != 0)
+     && (AsciiStrCmp (LauncherOption, "System") != 0))
   {
-    DEBUG ((DEBUG_WARN, "Misc->Boot->LauncherOption 是错误的 (只能是 Disabled, Full, 或 Short)!\n"));
+    DEBUG ((DEBUG_WARN, "Misc->Boot->LauncherOption 是错误的 (只能是 Disabled, Full, Short, 或 System)!\n"));
     ++ErrorCount;
   }
 
