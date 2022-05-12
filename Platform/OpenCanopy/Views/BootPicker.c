@@ -577,22 +577,23 @@ InternalBootPickerKeyEvent (
           GuiContext->PickerContext->WelcomeSuffix = NULL;
           GuiContext->PickerContext->TitleSuffix = NULL;
           GuiContext->Refresh = TRUE;
-          DrawContext->GuiContext->PickerContext->PlayAudioFile (
-          DrawContext->GuiContext->PickerContext,
-          OcVoiceOverAudioFileReloading,
-          FALSE
-      );
+					DrawContext->GuiContext->PickerContext->PlayAudioFile (
+																										DrawContext->GuiContext->PickerContext,
+																										OC_VOICE_OVER_AUDIO_FILE_RELOADING,
+																										OC_VOICE_OVER_AUDIO_BASE_TYPE_OPEN_CORE,
+																										FALSE
+																										);
     }
     else if (GuiContext->PickerContext->TitleSuffix == NULL){
           GuiContext->PickerContext->TitleSuffix = GuiContext->PickerContext->TempTitleSuffix;
           GuiContext->PickerContext->WelcomeSuffix =  GuiContext->PickerContext->TempWelcomSuffix;
           GuiContext->Refresh = TRUE;
-          DrawContext->GuiContext->PickerContext->PlayAudioFile (
-          DrawContext->GuiContext->PickerContext,
-          OcVoiceOverAudioFileReloading,
-          FALSE
-      );
-
+					DrawContext->GuiContext->PickerContext->PlayAudioFile (
+																										DrawContext->GuiContext->PickerContext,
+																										OC_VOICE_OVER_AUDIO_FILE_RELOADING,
+																										OC_VOICE_OVER_AUDIO_BASE_TYPE_OPEN_CORE,
+																										FALSE
+																										);
     }
   }
   if (KeyEvent->OcKeyCode == OC_INPUT_INTERNAL) {
