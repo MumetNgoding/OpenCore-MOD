@@ -21,10 +21,6 @@
 #include <Library/OcStorageLib.h>
 #include <Library/OcMiscLib.h>
 
-#include <Library/PrintLib.h>
-#include <Library/DevicePathLib.h>
-#include <Library/OcFileLib.h>
-
 #include "../OpenCanopy.h"
 #include "../BmfLib.h"
 #include "../GuiApp.h"
@@ -57,9 +53,6 @@ extern INT64  mBackgroundImageOffsetX;
 extern INT64  mBackgroundImageOffsetY;
 
 STATIC UINT32  mBootPickerLabelScrollHoldTime = 0;
-STATIC
-EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *
-mFileSystem = NULL;
 
 STATIC GUI_OBJ  *mBootPickerFocusList[] = {
   &mBootPicker.Hdr.Obj,
@@ -70,91 +63,6 @@ STATIC GUI_OBJ  *mBootPickerFocusList[] = {
 STATIC GUI_OBJ  *mBootPickerFocusListMinimal[] = {
   &mBootPicker.Hdr.Obj
 };
-
-//
-// Saving Entries' devicepath to file (Forked function only)
-//
-VOID
-SaveEntriesDataToFile (
-  IN CHAR16            *FilePath,
-  IN OC_BOOT_ENTRY     *Entries,
-  IN UINTN             Count
-  )
-{
-  EFI_STATUS                           Status;
-  EFI_TIME                             Date;
-  EFI_FILE_PROTOCOL                    *Fs;
-  UINTN                                Index;
-  CHAR8                                AsciiStr[512];
-  CHAR8                                *AsciiBuffer;
-  CHAR16                               *DevicePathText;
-  CHAR16                               *Path;
-  UINTN                                Size;
-
-  DevicePathText = NULL;
-  AsciiBuffer = AllocateZeroPool (EFI_PAGE_SIZE * Count);
-
-  if (AsciiBuffer != NULL) {
-    AsciiSPrint (AsciiStr, sizeof (AsciiStr), "====== Boot Entries Summary ======\n\n");
-    AsciiStrCatS (AsciiBuffer, EFI_PAGE_SIZE, AsciiStr);
-
-    for (Index = 0; Index < Count; ++Index) {
-      if (Entries[Index].Type == OC_BOOT_RESET_NVRAM || Entries[Index].DevicePath == NULL) {
-        continue;
-      }
-
-      AsciiSPrint (AsciiStr, sizeof (AsciiStr), "Entry name: %s\n",
-                   Entries[Index].Name
-                   );
-
-      AsciiStrCatS (AsciiBuffer, EFI_PAGE_SIZE, AsciiStr);
-      DevicePathText = ConvertDevicePathToText (Entries[Index].DevicePath, FALSE, FALSE);
-      AsciiSPrint (AsciiStr, sizeof (AsciiStr), "DevicePath: %s\n\n", DevicePathText);
-      AsciiStrCatS (AsciiBuffer, EFI_PAGE_SIZE, AsciiStr);
-      FreePool (DevicePathText);
-      DevicePathText = NULL;
-    }
-
-    Status = gRT->GetTime (&Date, NULL);
-    if (EFI_ERROR (Status)) {
-      ZeroMem (&Date, sizeof (Date));
-    }
-
-    AsciiSPrint (AsciiStr, sizeof (AsciiStr), "========= End =========\n\n");
-    AsciiStrCatS (AsciiBuffer, EFI_PAGE_SIZE, AsciiStr);
-
-    Size = StrSize (FilePath) + L_STR_SIZE (L"-0000-00-00-000000.txt");
-    Path = AllocatePool (Size);
-    UnicodeSPrint (Path,
-                   Size,
-                   L"%s-%04u-%02u-%02u-%02u%02u%02u.txt",
-                   FilePath,
-                   (UINT32) Date.Year,
-                   (UINT32) Date.Month,
-                   (UINT32) Date.Day,
-                   (UINT32) Date.Hour,
-                   (UINT32) Date.Minute,
-                   (UINT32) Date.Second
-    );
-
-    Status = mFileSystem->OpenVolume (mFileSystem, &Fs);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_INFO, "OCUI: Locating Writeable file system - %r\n", Status));
-    }
-
-    Status = OcSetFileData (Fs, Path, AsciiBuffer, AsciiStrLen (AsciiBuffer));
-    DEBUG ((DEBUG_INFO, "OCUI: Saving boot entries data to file - %r\n", Status));
-
-    if (AsciiBuffer != NULL) {
-      FreePool (AsciiBuffer);
-    }
-    if (Path != NULL) {
-      FreePool (Path);
-    }
-  } else {
-    DEBUG ((DEBUG_WARN, "OCUI: Cannot allocate memory for buffer\n"));
-  }
-}
 
 STATIC
 GUI_VOLUME_ENTRY *
@@ -540,7 +448,6 @@ InternalBootPickerKeyEvent (
       SelectedEntry->Context->SetDefault = (KeyEvent->OcModifiers & OC_MODIFIERS_SET_DEFAULT) != 0;
       GuiContext->ReadyToBoot            = TRUE;
       ASSERT (GuiContext->BootEntry == SelectedEntry->Context);
-      // SaveEntriesDataToFile (L"System-Entries", SelectedEntry->Context, mBootPicker.SelectedIndex);
     }
   } else if (mBootPickerContainer.Obj.Opacity != 0xFF) {
     //
@@ -548,6 +455,7 @@ InternalBootPickerKeyEvent (
     //
     return;
   }
+
   if (KeyEvent->OcKeyCode == OC_INPUT_MORE) {
     //
     // Match Builtin picker logic here: only refresh if the keypress makes a change
