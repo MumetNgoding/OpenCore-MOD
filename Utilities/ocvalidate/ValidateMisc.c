@@ -706,7 +706,7 @@ CheckMiscTools (
     //
     // Check the length of path relative to OC directory.
     //
-    if (StrLen (OPEN_CORE_TOOL_PATH) + AsciiStrSize (Path) > OC_STORAGE_SAFE_PATH_MAX) {
+    if (L_STR_LEN (OPEN_CORE_TOOL_PATH) + AsciiStrSize (Path) > OC_STORAGE_SAFE_PATH_MAX) {
       DEBUG ((DEBUG_WARN, "Misc->Tools[%u]->路径太长 (不应超过 %u)!\n", Index, OC_STORAGE_SAFE_PATH_MAX));
       ++ErrorCount;
     }
