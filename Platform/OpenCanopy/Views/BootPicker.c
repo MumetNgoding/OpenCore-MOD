@@ -136,7 +136,7 @@ InternalBootPickerAnimateLabel (
 }
 
 STATIC GUI_ANIMATION  mBootPickerLabelAnimation = {
-  INITIALIZE_LIST_HEAD_VARIABLE (mBootPickerLabelAnimation.Link),
+  { NULL, NULL },
   NULL,
   InternalBootPickerAnimateLabel
 };
@@ -1915,7 +1915,7 @@ InternalBootPickerAnimateTimeout (
 }
 
 STATIC GUI_ANIMATION  mBootPickerIntroAnimation = {
-  INITIALIZE_LIST_HEAD_VARIABLE (mBootPickerIntroAnimation.Link),
+  { NULL, NULL },
   NULL,
   InternalBootPickerAnimateIntro
 };
@@ -2109,6 +2109,8 @@ BootPickerViewInitialize (
   //      ∆i = (N(added after) - N(added before))
   // Conditions for delta function:
   //
+
+  InitializeListHead (&mBootPickerLabelAnimation.Link);
 
   if (!GuiContext->DoneIntroAnimation) {
     InitBpAnimIntro (DrawContext);
