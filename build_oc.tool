@@ -177,6 +177,7 @@ package() {
       "ResetNvramEntry.efi"
       "ToggleSipEntry.efi"
       "UsbMouseDxe.efi"
+      "OpenVariableRuntimeDxe.efi"
       "XhciDxe.efi"
       )
     for efiDriver in "${efiDrivers[@]}"; do
@@ -221,7 +222,8 @@ package() {
   # Copy LogoutHook.
   mkdir -p "${dstdir}/Utilities/LogoutHook" || exit 1
   logoutFiles=(
-    "LogoutHook.command"
+    "Launchd.command"
+    "Launchd.command.plist"
     "README.md"
     "nvramdump"
     )
