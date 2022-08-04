@@ -459,6 +459,8 @@ OcMiscEarlyInit (
     return EFI_UNSUPPORTED; ///< Should be unreachable.
   }
 
+  OcLoadDrivers (Storage, Config, NULL, TRUE);
+
   OcVariableInit (Config->Uefi.Quirks.ForceOcWriteFlash);
 
   AsciiVault = OC_BLOB_GET (&Config->Misc.Security.Vault);
