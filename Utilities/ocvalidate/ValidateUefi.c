@@ -374,7 +374,7 @@ CheckUefiDrivers (
       IndexOpenVariableRuntimeDxeEfiDriver = Index;
 
       if (!DriverEntry->LoadEarly) {
-        DEBUG ((DEBUG_WARN, "OpenVariableRuntimeDxe at UEFI->Drivers[%u] must have LoadEarly set to TRUE!\n", Index));
+        DEBUG ((DEBUG_WARN, "UEFI->Drivers[%u] 处的 OpenVariableRuntimeDxe 必须将 LoadEarly 设置为 TRUE!\n", Index));
         ++ErrorCount;
       }
     }
@@ -383,7 +383,7 @@ CheckUefiDrivers (
     // For all drivers but OpenVariableRuntimeDxe.efi and OpenRuntime.efi, LoadEarly must be FALSE.
     //
     if ((AsciiStrCmp (Driver, "OpenVariableRuntimeDxe.efi") != 0) && (AsciiStrCmp (Driver, "OpenRuntime.efi") != 0) && DriverEntry->LoadEarly) {
-      DEBUG ((DEBUG_WARN, "%a at UEFI->Drivers[%u] must have LoadEarly set to FALSE!\n", Driver, Index));
+      DEBUG ((DEBUG_WARN, "UEFI->Drivers[%u] 处的% a 必须将 LoadEarly 设置为 FALSE!\n", Driver, Index));
       ++ErrorCount;
     }
 
@@ -421,7 +421,7 @@ CheckUefiDrivers (
       HasOpenVariableRuntimeDxeEfiDriver = TRUE;
 
       if (!DriverEntry->LoadEarly) {
-        DEBUG ((DEBUG_WARN, "OpenVariableRuntimeDxe at UEFI->Drivers[%u] must have LoadEarly set to TRUE!\n", Index));
+        DEBUG ((DEBUG_WARN, "UEFI->Drivers[%u] 处的 OpenVariableRuntimeDxe 必须将 LoadEarly 设置为 TRUE!\n", Index));
       }
     }
   }
@@ -440,7 +440,7 @@ CheckUefiDrivers (
     if (!IsOpenRuntimeLoadEarly) {
       DEBUG ((
         DEBUG_WARN,
-        "OpenRuntime.efi at UEFI->Drivers[%u] should have its LoadEarly set to TRUE when OpenVariableRuntimeDxe.efi at UEFI->Drivers[%u] is in use!\n",
+        "当 UEFI->Drivers[%u] 处的 OpenVariableRuntimeDxe.efi 正在使用时，UEFI->Drivers[%u] 处的 OpenRuntime.efi 应将其 LoadEarly 设置为 TRUE!\n",
         IndexOpenRuntimeEfiDriver,
         IndexOpenVariableRuntimeDxeEfiDriver
         ));
@@ -450,7 +450,7 @@ CheckUefiDrivers (
     if (IndexOpenVariableRuntimeDxeEfiDriver >= IndexOpenRuntimeEfiDriver) {
       DEBUG ((
         DEBUG_WARN,
-        "OpenRuntime.efi (currently at UEFI->Drivers[%u]) should be placed after OpenVariableRuntimeDxe.efi (currently at UEFI->Drivers[%u])!\n",
+        "OpenRuntime.efi（当前位于 UEFI->Drivers[%u]）应放在 OpenVariableRuntimeDxe.efi（当前位于 UEFI->Drivers[%u]）之后!\n",
         IndexOpenRuntimeEfiDriver,
         IndexOpenVariableRuntimeDxeEfiDriver
         ));
