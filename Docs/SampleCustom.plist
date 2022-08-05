@@ -1202,6 +1202,8 @@
 				<true/>
 				<key>Comment</key>
 				<string>Not signed for security reasons</string>
+				<key>DisableFirmwareRuntime</key>
+				<false/>
 				<key>Enabled</key>
 				<false/>
 				<key>Flavour</key>
@@ -1222,6 +1224,8 @@
 				<true/>
 				<key>Comment</key>
 				<string>Memory testing utility</string>
+				<key>DisableFirmwareRuntime</key>
+				<false/>
 				<key>Enabled</key>
 				<false/>
 				<key>Flavour</key>
@@ -1242,6 +1246,8 @@
 				<true/>
 				<key>Comment</key>
 				<string>Perform shutdown</string>
+				<key>DisableFirmwareRuntime</key>
+				<false/>
 				<key>Enabled</key>
 				<false/>
 				<key>Flavour</key>
