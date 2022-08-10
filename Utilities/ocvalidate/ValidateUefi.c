@@ -416,14 +416,6 @@ CheckUefiDrivers (
       HasAudioDxeEfiDriver   = TRUE;
       IndexAudioDxeEfiDriver = Index;
     }
-
-    if (AsciiStrCmp (Driver, "OpenVariableRuntimeDxe.efi") == 0) {
-      HasOpenVariableRuntimeDxeEfiDriver = TRUE;
-
-      if (!DriverEntry->LoadEarly) {
-        DEBUG ((DEBUG_WARN, "UEFI->Drivers[%u] 处的 OpenVariableRuntimeDxe 必须将 LoadEarly 设置为 TRUE!\n", Index));
-      }
-    }
   }
 
   //
@@ -436,25 +428,36 @@ CheckUefiDrivers (
                   UefiDriverHasDuplication
                   );
 
-  if (HasOpenVariableRuntimeDxeEfiDriver && HasOpenRuntimeEfiDriver) {
-    if (!IsOpenRuntimeLoadEarly) {
-      DEBUG ((
-        DEBUG_WARN,
-        "当 UEFI->Drivers[%u] 处的 OpenVariableRuntimeDxe.efi 正在使用时，UEFI->Drivers[%u] 处的 OpenRuntime.efi 应将其 LoadEarly 设置为 TRUE!\n",
-        IndexOpenRuntimeEfiDriver,
-        IndexOpenVariableRuntimeDxeEfiDriver
-        ));
-      ++ErrorCount;
-    }
+  if (HasOpenRuntimeEfiDriver) {
+    if (HasOpenVariableRuntimeDxeEfiDriver) {
+      if (!IsOpenRuntimeLoadEarly) {
+        DEBUG ((
+          DEBUG_WARN,
+          "OpenRuntime.efi at UEFI->Drivers[%u] should have its LoadEarly set to TRUE when OpenVariableRuntimeDxe.efi at UEFI->Drivers[%u] is in use!\n",
+          IndexOpenRuntimeEfiDriver,
+          IndexOpenVariableRuntimeDxeEfiDriver
+          ));
+        ++ErrorCount;
+      }
 
-    if (IndexOpenVariableRuntimeDxeEfiDriver >= IndexOpenRuntimeEfiDriver) {
-      DEBUG ((
-        DEBUG_WARN,
-        "OpenRuntime.efi（当前位于 UEFI->Drivers[%u]）应放在 OpenVariableRuntimeDxe.efi（当前位于 UEFI->Drivers[%u]）之后!\n",
-        IndexOpenRuntimeEfiDriver,
-        IndexOpenVariableRuntimeDxeEfiDriver
-        ));
-      ++ErrorCount;
+      if (IndexOpenVariableRuntimeDxeEfiDriver >= IndexOpenRuntimeEfiDriver) {
+        DEBUG ((
+          DEBUG_WARN,
+          "OpenRuntime.efi (目前在 UEFI->Drivers[%u] 处) 应该放在 OpenVariableRuntimeDxe.efi 之后 (目前在 UEFI->Drivers[%u])!\n",
+          IndexOpenRuntimeEfiDriver,
+          IndexOpenVariableRuntimeDxeEfiDriver
+          ));
+        ++ErrorCount;
+      }
+    } else {
+      if (IsOpenRuntimeLoadEarly) {
+        DEBUG ((
+          DEBUG_WARN,
+          "UEFI->Drivers[%u] 处的 OpenRuntime.efi 应将其 LoadEarly 设置为 FALSE，除非正在使用 OpenVariableRuntimeDxe.efi!\n",
+          IndexOpenRuntimeEfiDriver
+          ));
+        ++ErrorCount;
+      }
     }
   }
 
