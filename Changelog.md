@@ -1,5 +1,17 @@
 OpenCore Changelog
 ==================
+#### v0.8.7
+- Removed unwanted clear screen when launching non-text boot entry
+- Fixed TSC/FSB for AMD CPUs in ProvideCurrentCpuInfo, thx @Shaneee
+- Changed `Misc` -> `Boot` -> `ShowPicker` typing to string:
+  - `Always` - Always show picker (equivalent to 0.8.6's ShowPicker=True)
+  - `Never` - Never show picker (equivalent to 0.8.6's ShowPicker=False)
+  - `SkipOnHibernateWake` - Don't show picker if waking from macOS hibernation
+- Changed macrecovery to download files into `com.apple.recovery.boot` by default, thx @dreamwhite
+- Supported Apple builtin picker (using `BootKicker.efi` or `PickerMode` `Apple`) on MacPro5,1 graphics cards with no firmware Mac-EFI support (thx @cdf, @tsialex)
+- Enabled `PickerMode` `Apple` to successfully launch selected entry
+- Enabled `BootKicker.efi` to successfully launch selected entry (via reboot) (thx @cdf)
+
 #### v0.8.6
 - Updated NVRAM save script for compatibilty with earlier macOS (Snow Leopard+ tested)
 - Updated NVRAM save script to automatically install as launch daemon (Yosemite+) or logout hook (older macOS)
