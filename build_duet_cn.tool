@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+
 imgbuild() {
   local arch="$1"
 
@@ -79,7 +79,7 @@ package() {
     echo "$(pwd)缺少软件包目录 $1"
     exit 1
   fi
-  
+
   if [ ! -d "$1"/../FV ]; then
     echo "$(pwd)的FV目录 $1/../FV 丢失"
     exit 1

@@ -547,7 +547,7 @@ CheckMiscSecurity (
     }
 
     if (((ScanPolicy & OC_SCAN_DEVICE_BITS) != 0) && ((ScanPolicy & OC_SCAN_DEVICE_LOCK) == 0)) {
-      DEBUG ((DEBUG_WARN, "Misc->Security->ScanPolicy requests scanning devices, but OC_SCAN_DEVICE_LOCK (bit 1) is not set!\n"));
+      DEBUG ((DEBUG_WARN, "Misc->Security->ScanPolicy requests scanning devices, but OC_SCAN_DEVICE_LOCK (bit 1)未设置!\n"));
       ++ErrorCount;
     }
   }
