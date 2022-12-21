@@ -240,7 +240,7 @@ CheckMiscBoot (
      && (AsciiStrCmp (PickerMode, "External") != 0)
      && (AsciiStrCmp (PickerMode, "Apple") != 0))
   {
-    DEBUG ((DEBUG_WARN, "Misc->Boot->PickerMode is borked (Can only be Builtin, External, or Apple)!\n"));
+    DEBUG ((DEBUG_WARN, "Misc->Boot->PickerMode 不正确 (只能是Builtin, External, 或 Apple)!\n"));
     ++ErrorCount;
   } else if (HasOpenCanopyEfiDriver && (AsciiStrCmp (PickerMode, "External") != 0)) {
     DEBUG ((DEBUG_WARN, "Misc->Boot->PickerMode 不正确 (只能是Builtin, External, 或 Apple)!\n"));
@@ -542,7 +542,7 @@ CheckMiscSecurity (
     }
 
     if (((ScanPolicy & OC_SCAN_DEVICE_BITS) != 0) && ((ScanPolicy & OC_SCAN_DEVICE_LOCK) == 0)) {
-      DEBUG ((DEBUG_WARN, "Misc->Security->ScanPolicy requests scanning devices, but OC_SCAN_DEVICE_LOCK (bit 1) is not set!\n"));
+      DEBUG ((DEBUG_WARN, "Misc->Security->ScanPolicy 需要扫描设备, 但 OC_SCAN_DEVICE_LOCK (bit 1) 未设置!\n"));
       ++ErrorCount;
     }
   }
