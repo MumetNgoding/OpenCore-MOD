@@ -133,7 +133,7 @@ if [ "${INTREE}" != "" ]; then
   cd .. || exit 1
 
   echo "正在编译OpenDuetPkg..."
-  build -a "${TARGETARCH}" -b "${TARGET}" -t ${TARGETCHAIN} -p OpenCorePkg/OpenDuetPkg.dsc || exit 1
+  build -a "${TARGETARCH}" -b "${TARGET}" -t "${TARGETCHAIN}" -p OpenCorePkg/OpenDuetPkg.dsc || exit 1
   BUILD_DIR="${WORKSPACE}/Build/OpenDuetPkg/${TARGET}_${TARGETCHAIN}"
   BUILD_DIR_ARCH="${BUILD_DIR}/${TARGETARCH}"
   imgbuild "${TARGETARCH}"
