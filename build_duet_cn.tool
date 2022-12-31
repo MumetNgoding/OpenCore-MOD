@@ -109,7 +109,16 @@ UNAME="$(uname)"
 if [ "$(echo "${UNAME}" | grep MINGW)" != "" ] || [ "$(echo "${UNAME}" | grep MSYS)" != "" ]; then
   UNAME="Windows"
 fi
+
+FV_TOOLS_BUILDDIR="$(pwd)/Utilities/BaseTools"
 FV_TOOLS="$(pwd)/Utilities/BaseTools/bin.${UNAME}"
+
+echo "为你的平台编译BaseTools..."
+if [ "$UNAME" != "Windows" ]; then
+  make -C "$FV_TOOLS_BUILDDIR" || exit 1
+else
+  CC=gcc DIST=Windows make -C "$FV_TOOLS_BUILDDIR" || exit 1
+fi
 
 if [ ! -d "${FV_TOOLS}" ]; then
   echo "错误：您需要为您的平台编译BaseTools!"
@@ -146,10 +155,13 @@ else
     ARCHS=(X64 IA32)
     export ARCHS
   fi
+
+  DISCARD_PACKAGES=OpenCorePkg
   SELFPKG_DIR="OpenCorePkg"
   SELFPKG=OpenDuetPkg
   NO_ARCHIVES=1
 
+  export DISCARD_PACKAGES
   export SELFPKG_DIR
   export SELFPKG
   export NO_ARCHIVES
