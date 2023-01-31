@@ -5,6 +5,10 @@ OpenCore Changelog
 - Fixed loading macOS with legacy boot without Apple Secure Boot
 - Added Linux support to legacy boot BootInstall script
 - Updated builtin firmware versions for SMBIOS and the rest
+- Fixed incomplete console mode initialisation when started in graphics mode
+- Provided additional UEFI forge mode, for use in firmware drivers
+- Implemented firmware driver enabling pre-OpenCore graphics on non-natively supported GPUs on EFI-era Macs
+- Prevented unwanted clear screen to console background colour when in graphics mode
 
 #### v0.8.8
 - Updated underlying EDK II package to edk2-stable202211
