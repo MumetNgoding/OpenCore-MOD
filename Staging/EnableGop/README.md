@@ -1,7 +1,7 @@
 # Provides standalone GOP driver for EFI era Mac Pro and iMac
 
 ## Status
-**Current status: Early beta release.**
+**Current status: Beta release.**
 
 This driver has been tested and is working on several iMac models
 with several different GPUs, and on several MacPro4,1/5,1 machines with several different GPUs. However, in the worst
@@ -62,6 +62,10 @@ as it renders faster on most other systems.
 The driver may be installed to VBIOS or to main firmware. It is expected that most Mac Pro users will use firmware insertion
 and most iMac users will chose VBIOS insertion, however both techniques work on both systems (but it is harder to modify the
 iMac firmware).
+
+Further discussion and community support for this driver is available at:
+
+ - https://forums.macrumors.com/threads/pre-opencore-gop-support-for-efi-era-imacs-and-mac-pros.2378942/
 
 ## Usage
 
@@ -131,7 +135,8 @@ To use the provided `NvInsertEfi.sh` script:
  - Use `nvflash` to read a copy of your VBIOS.
  - Using a hex editor, search in the VBIOS for the byte sequence `F1 0E 00 00` with the byte sequence `55 AA` coming
  close before it; the start address of the `55 AA` is the value needed for the insertion offset in the next step.
- - Run `./NvInsertEfi.Sh {original}.rom EnableGop.ffs {offset} {modified}/.rom`.
+ - Run `./NvInsertEfi.sh {original}.rom EnableGop.efi {offset} {modified}/.rom`.
+   - Run `./NvInsertEfi.sh` with no argiments to see allowed formats for offset parameter.
    - Only if you modified a rom file obtained via `flashrom` rather than `nvflash`, you should manually truncate
    the modified file's size to the original file's size at this point. (`nvflash` files only contain the used section
    of the VBIOS, and therefore must not be truncated.)
@@ -146,9 +151,3 @@ Similar procedures as for Nvidia apply.
 
  - Further assistance and information may be available in the forums and pages listed above.
 
-## No longer supported: Install as Driver#### entry
-
-Early test versions of this driver included code to allow it to work when installed as a `Driver####` entry
-(`Driver####` entries do work when installed via `bcfg` and using MacPro4,1/5,1 firmware; they do not work on
-that firmware if using `efibootmgr`, and they are not supported by iMac firmware). This code has been removed
-in order to minimise the driver size for VBIOS insertion.
