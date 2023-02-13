@@ -12,6 +12,10 @@ OpenCore Changelog
 - Added `ResizeUsePciRbIo` quirk to workaround broken PciIo on some UEFI firmwares, thx @xCuri0
 - Fixed crash while using `SysReport` on older Atom systems
 - Fixed kexts without a Contents folder not being patched during a cacheless boot
+- Added read-only sections (`.rdata`) to all drivers for better memory protection when supported
+- Fixed crash while using `SysReport` on systems with non-audio HDA codecs
+- Fixed debug script support for GDB and LLDB
+- Fixed legacy boot debug builds asserting on macOS loading
 
 #### v0.8.8
 - Updated underlying EDK II package to edk2-stable202211
