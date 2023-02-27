@@ -378,7 +378,13 @@ GetPickerKeyInfo (
     //
     // CMD+V is always valid and enables Verbose Mode.
     //
-    if ((HasCommand && HasKeyV) || HasKeyV) {
+    // Note: Verbose boot may be entered in three different ways:
+    //  - Loaded image options passed from bootloader (as will happen due to below
+    //    code, when CMD+V is pressed during OpenCore picker menu).
+    //  - `-v` option in NVRAM `boot-args` variable.
+    //  - boot.efi itself detecting that CMD+V is held down when it starts.
+    //
+    if (HasCommand && HasKeyV) {
       if (OcGetArgumentFromCmd (Context->AppleBootArgs, "-v", L_STR_LEN ("-v"), NULL) == NULL) {
         DEBUG ((DEBUG_INFO, "OCHK: CMD+V means -v\n"));
         OcAppendArgumentToCmd (Context, Context->AppleBootArgs, "-v", L_STR_LEN ("-v"));
