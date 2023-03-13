@@ -5,7 +5,7 @@
 
 OpenCore bootloader with development SDK.
 
-## Libraries
+## Libraries 
 
 This repository also contains additional UEFI support common libraries shared by other projects in [Acidanthera](https://github.com/acidanthera). The primary purpose of the library set is to provide supplemental functionality for Apple-specific UEFI drivers. Key features:
 
