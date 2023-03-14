@@ -10,8 +10,6 @@ name: Build OpenCore-Mod
 
 on:
   push:
-  schedule:
-    - cron: '20 */6 * * *'
   workflow_dispatch:
 
 env:
@@ -59,7 +57,7 @@ jobs:
 
       - name: CI Bootstrap
         run: |
-          git clone --depth=100 https://gitee.com/btwise/OpenCore_NO_ACPI.git OpenCore_NO_ACPI
+          git clone --depth=100 https://github.com/MumetNgoding/OpenCore-MOD.git OpenCore_NO_ACPI
           cd ./OpenCore_NO_ACPI
           
           # 容错
